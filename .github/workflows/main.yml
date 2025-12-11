@@ -5,6 +5,10 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -34,13 +38,30 @@ jobs:
         name: cliperus-windows-installer
         path: dist/Cliperus.exe
     
+    - name: Get short SHA
+      id: slug
+      run: echo "sha7=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+      shell: bash
+    
     - name: Create Release
-      if: github.event_name == 'push'
       uses: softprops/action-gh-release@v2
       with:
         files: dist/Cliperus.exe
         tag_name: v1.0.${{ github.run_number }}
         name: Cliperus v1.0.${{ github.run_number }}
+        body: |
+          ## Cliperus Build v1.0.${{ github.run_number }}
+          
+          Automatically built from commit ${{ steps.slug.outputs.sha7 }}
+          
+          ### Download
+          - Download Cliperus.exe below
+          
+          ### Installation
+          1. Download Cliperus.exe
+          2. Run the executable
+          3. Configure OBS WebSocket in settings
+          4. Add your streams and start recording!
         draft: false
         prerelease: false
       env:
