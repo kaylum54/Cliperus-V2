@@ -44,7 +44,7 @@ jobs:
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
+
 
 5. **Wait 5-10 Minutes**
    - GitHub Actions builds your .exe automatically
